@@ -16,24 +16,59 @@ namespace BuyerDB.Repositories
         {
             _buyerContext = buyerContext;
         }
-        public async Task<bool> AddToCart(Cart cart)
+        public async Task<bool> AddToCart(AddToCart cart)
         {
-            _buyerContext.Cart.Add(cart);
-            var buyerCart = await _buyerContext.SaveChangesAsync();
-            if (buyerCart > 0)
+            Cart cart1 = new Cart();
+            if (cart != null)
+            {
+                cart1.Cartid = cart.cartId;
+                cart1.Categoryid = cart.categoryId;
+                cart1.Subid = cart.subCategoryId;
+                cart1.Buyerid = cart.buyerId;
+                cart1.Itemid = cart.itemId;
+                cart1.Price = cart.price;
+                cart1.Itemname = cart.itemName;
+                cart1.Description = cart.description;
+                cart1.Stockno = cart.stockNo;
+                cart1.Remarks = cart.remarks;
+                cart1.Imagename = cart.imageName;
+            }
+            _buyerContext.Cart.Add(cart1);
+            var buyercart = await _buyerContext.SaveChangesAsync();
+            if (buyercart > 0)
+            {
                 return true;
+            }
             else
+            {
                 return false;
+            }
         }
 
-        public async Task<bool> BuyItem(Purchasehistory purchase)
+        public async Task<bool> BuyItem(PurchaseHistory purchase)
         {
-            _buyerContext.Purchasehistory.Add(purchase);
-            var item = await _buyerContext.SaveChangesAsync();
-            if (item > 0)
+            Purchasehistory purchasehistory = new Purchasehistory();
+            if (purchase != null)
+            {
+                purchasehistory.Purchaseid = purchase.purchaseId;
+                purchasehistory.Buyerid = purchase.buyerId;
+                 purchasehistory.Transactiontype = purchase.transactionType;
+                 purchasehistory.Itemid = purchase.itemId;
+                purchasehistory.Noofitems = purchase.noOfItems;
+                purchasehistory.Datetime = purchase.dateTime;
+                purchasehistory.Remarks = purchase.remarks;
+                purchasehistory.Transactiontype = purchase.transactionStatus;
+            }
+            _buyerContext.Purchasehistory.Add(purchasehistory);
+            var buyitem = await _buyerContext.SaveChangesAsync();
+            if (buyitem > 0)
+            {
                 return true;
+            }
             else
+            {
                 return false;
+            }
 
         }
 
@@ -57,10 +92,28 @@ namespace BuyerDB.Repositories
                 return false;
         }
 
-        public async Task<Cart> GetCartItem(string cartId)
+        public async Task<AddToCart> GetCartItem(string cartId)
         {
-            return await _buyerContext.Cart.FindAsync(cartId);
-        }
+            Cart cart = await _buyerContext.Cart.FindAsync(cartId);
+            if (cart == null)
+                return null;
+            else
+            {
+                AddToCart cart1 = new AddToCart();
+                cart1.cartId = cart.Cartid;
+                cart1.categoryId = cart.Categoryid;
+                cart1.subCategoryId = cart.Subid;
+                cart1.buyerId = cart.Buyerid;
+                cart1.itemId = cart.Itemid;
+                cart1.price = cart.Price;
+                cart1.itemName = cart.Itemname;
+                cart1.description = cart.Description;
+                cart1.stockNo = cart.Stockno;
+                cart1.remarks = cart.Remarks;
+                cart1.imageName = cart.Imagename;
+                return cart1;
+            }
+            }
 
         public async Task<List<Cart>> GetCarts(string buyerId)
         {
@@ -83,35 +136,71 @@ namespace BuyerDB.Repositories
             return await _buyerContext.Items.ToListAsync();
         }
 
-        public async Task<List<SubCategory>> GetSubCategories(string categoryId)
+        public async Task<List<SubCategory>> GetSubCategories(ProductCategory productCategory)
         {
-            return await _buyerContext.SubCategory.Where(e => e.Categoryid == categoryId).ToListAsync();
+            if (productCategory == null)
+            {
+                return null;
+            }
+            else
+            {
+                return await _buyerContext.SubCategory.Where(e => e.Categoryid == productCategory.categoryId).ToListAsync();
+            }
         }
 
-        public async Task<List<Items>> Items(string price, string price1)
+     /*       public async Task<List<Items>> Items(string price, string price1)
         {
 
             throw new NotImplementedException();
+        }*/
+
+       /* public async Task<List<Purchasehistory>> Purchase((PurchaseHistory purchaseHistory)
+        {
+            Buyer buyer = _buyerContext.Buyer.Find(purchaseHistory.);
+            if (buyer == null)
+            {
+                return null;
+            }
+            else
+            {
+                return await _buyerContext.Purchasehistory.Where(e => e.Buyerid== buyer.Buyerid).ToListAsync();
+            }
+        }*/
+
+            public async Task<List<Items>> Search(Product product)
+        {
+            if (product == null)
+            {
+                return null;
+            }
+            else
+            {
+                return await _buyerContext.Items.Where(e => e.Itemname == product.productName).ToListAsync();
+            }
         }
 
-        public async Task<List<Purchasehistory>> Purchase(Login login)
+            public async Task<List<Items>> SearchItemByCategory(ProductCategory productCategory)
         {
-            return await _buyerContext.Purchasehistory.Where(e => e.Buyerid == login.buyerId).ToListAsync();
+            if (productCategory == null)
+            {
+                return null;
+            }
+            else
+            {
+                return await _buyerContext.Items.Where(e => e.Categoryid == productCategory.categoryId).ToListAsync();
+            }
         }
 
-        public async Task<List<Items>> Search(Product product)
+            public async Task<List<Items>> SearchItemBySubCategory(ProductSubCategory productSubCategory)
         {
-            return await _buyerContext.Items.Where(e => e.Itemname == product.productName).ToListAsync();
+            if (productSubCategory == null)
+            {
+                return null;
+            }
+            else
+            {
+                return await _buyerContext.Items.Where(e => e.Subid== productSubCategory.subCategoryId).ToListAsync();
+            }
         }
-
-        public async Task<List<Items>> SearchItemByCategory(ProductCategory productCategory)
-        {
-            return await _buyerContext.Items.Where(e => e.Itemname == productCategory.categoryName).ToListAsync();
         }
-
-        public async Task<List<Items>> SearchItemBySubCategory(ProductSubCategory productSubCategory)
-        {
-            return await _buyerContext.Items.Where(e => e.Itemname == productSubCategory.subCategoryName).ToListAsync();
-        }
-    }
 }

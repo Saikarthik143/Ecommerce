@@ -22,17 +22,17 @@ namespace BuyerService.Controllers
         }
         [HttpPost]
         [Route("EditProfile")]
-        public async Task<IActionResult> EditBuyerProfile(Buyer buyer)
+        public async Task<IActionResult> EditBuyerProfile(BuyerData buyer)
         {
             return Ok(await _buyerManager.EditBuyerProfile(buyer));
 
         }
         [HttpGet]
-        [Route("Profile/{bid}")]
+        [Route("Profile/{buyerId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetBuyerProfile(string buyerId)
         {
-            Buyer buyer = await _buyerManager.GetBuyerProfile(buyerId);
+            BuyerData buyer = await _buyerManager.GetBuyerProfile(buyerId);
             if (buyer == null)
                 return Ok("Invalid User");
             else

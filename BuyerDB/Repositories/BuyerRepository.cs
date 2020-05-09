@@ -1,4 +1,5 @@
 ﻿using BuyerDB.Entity;
+using BuyerDB.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,27 +14,45 @@ namespace BuyerDB.Repositories
         {
             _buyerContext = buyerContext;
         }
-        public async Task<bool> EditBuyerProfile(Buyer buyer)
+        public async Task<bool> EditBuyerProfile(BuyerData buyer)
         {
-            _buyerContext.Update(buyer);
-            var user = await _buyerContext.SaveChangesAsync();
-            if (user > 0)
+            Buyer buyer1 = _buyerContext.Buyer.Find(buyer.buyerId);
+            if (buyer1 != null)
             {
-                return true;
+                buyer1.Buyername = buyer.userName;
+                buyer1.Password = buyer.password;
+                buyer1.Mobileno = buyer.mobileNo;
+                buyer1.Email = buyer.emailId;
+                _buyerContext.Buyer.Update(buyer1);
+                var user = await _buyerContext.SaveChangesAsync();
+                if (user > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
-            {
                 return false;
-            }
         }
 
-        public async Task<Buyer> GetBuyerProfile(string buyerId)
+        public async Task<BuyerData> GetBuyerProfile(string buyerId)
         {
             Buyer buyer = await _buyerContext.Buyer.FindAsync(buyerId);
             if (buyer == null)
                 return null;
             else
-                return buyer;
+            {
+                BuyerData buyerData = new BuyerData();
+                buyerData.buyerId = buyer.Buyerid;
+                buyerData.userName = buyer.Buyername;
+                buyerData.password = buyer.Password;
+                buyerData.emailId = buyer.Email;
+                buyerData.mobileNo = buyer.Mobileno;
+                return buyerData;
+            }
         }
     }
 }

@@ -24,6 +24,10 @@ namespace UserService.Controllers
             _userManager = userManager;
             _logger = logger;
         }
+       /* public UserController(IUserManager userManager)
+        {
+            _userManager = userManager;
+        }*/
         /// <summary>
         /// Register buyer
         /// </summary>
@@ -31,20 +35,20 @@ namespace UserService.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> Buyer(Buyer buyer)
+        public async Task<IActionResult> Buyer(BuyerRegister buyer1)
         {
 
             _logger.LogInformation("Register");
-            if (buyer is null)
+            if (buyer1 is null)
             {
-                return BadRequest("Buyer is null");
+                return BadRequest("Buyer is already register");
             }
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
             _logger.LogInformation("Succesfully Registered");
-            return Ok(await _userManager.BuyerRegister(buyer));
+            return Ok(await _userManager.BuyerRegister(buyer1));
 
         }
         /// <summary>

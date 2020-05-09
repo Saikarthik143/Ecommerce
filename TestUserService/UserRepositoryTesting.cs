@@ -28,20 +28,18 @@ namespace TestUserService
         /// Testing register buyer
         /// </summary>
         [Test]
-        [TestCase("B43", "iath", "sarath123#", "sarath@gmail.com", "9876543210")]
-        [TestCase("B13", "tharath", "trath123#", "tarath@gmail.com", "9879543210")]
+        [TestCase("B12", "gopi", "sarath123#", "sarath@gmail.com", "9876543210")]
+        [TestCase("B14", "nath", "trath123#", "tarath@gmail.com", "9879543210")]
         [Description("Add Buyer Testing")]
         public async Task RegisterBuyer_Successfull(string buyerId, string userName, string password, string email, string mobileNo)
         {
             try
             {
                 DateTime datetime = System.DateTime.Now;
-                var buyer = new Buyer { Buyerid = buyerId, Buyername = userName, Password = password, Email = email, Mobileno = mobileNo, Datetime = datetime };
-                await userRepository.BuyerRegister(buyer);
+                var buyer = new BuyerRegister { buyerId = buyerId, userName = userName, password = password, mobileNo = mobileNo, emailId = email, dateTime = datetime };
                 var mock = new Mock<IUserRepository>();
-                mock.Setup(x => x.BuyerRegister(buyer));
-                var login = new Login { userName = userName, userPassword = password };
-                var result = await userRepository.BuyerLogin(login);
+                mock.Setup(x => x.BuyerRegister(buyer)).ReturnsAsync(true);
+                var result = await userRepository.BuyerRegister(buyer);
                 Assert.NotNull(result);
             }
             catch (Exception e)
@@ -66,7 +64,7 @@ namespace TestUserService
             }
         }
         [Test]
-        [TestCase("tarath", "trath123")]
+        [TestCase("tath", "trath123")]
         [Description("Test buyer login failure case")]
         public async Task BuyerLogin_UnSuccessfull(string userName, string password)
         {
@@ -74,7 +72,7 @@ namespace TestUserService
             {
                 var login = new Login { userName = userName, userPassword = password };
                 var result = await userRepository.BuyerLogin(login);
-                Assert.AreEqual(null, result);
+                Assert.IsNull(result, "invalid credentials");
             }
             catch (Exception e)
             {

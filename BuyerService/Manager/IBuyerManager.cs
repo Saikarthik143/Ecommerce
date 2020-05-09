@@ -1,4 +1,5 @@
 ﻿using BuyerDB.Entity;
+using BuyerDB.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace BuyerService.Manager
 {
    public interface IBuyerManager
     {
-        Task<bool> EditBuyerProfile(Buyer buyer);
-        Task<Buyer> GetBuyerProfile(string buyerId);
+        Task<bool> EditBuyerProfile(BuyerData buyer);
+        Task<BuyerData> GetBuyerProfile(string buyerId);
     }
 }

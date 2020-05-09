@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BuyerDB.Repositories;
+using BuyerDB.Models;
 
 namespace BuyerService.Manager
 {
@@ -14,7 +15,7 @@ namespace BuyerService.Manager
         {
             _buyerRepository = buyerRepository;
         }
-        public async Task<bool> EditBuyerProfile(Buyer buyer)
+        public async Task<bool> EditBuyerProfile(BuyerData buyer)
         {
             bool user = await _buyerRepository.EditBuyerProfile(buyer);
             if (user)
@@ -27,9 +28,9 @@ namespace BuyerService.Manager
             }
         }
 
-        public async Task<Buyer> GetBuyerProfile(string buyerId)
+        public async Task<BuyerData> GetBuyerProfile(string buyerId)
         {
-            Buyer buyer = await _buyerRepository.GetBuyerProfile(buyerId);
+            BuyerData buyer = await _buyerRepository.GetBuyerProfile(buyerId);
             if (buyer == null)
             {
                 return null;

@@ -1,0 +1,24 @@
+2020-05-09 13:51:27.9850 Info Message Template Auto Format enabled
+2020-05-09 13:51:28.1233 Info Loading assembly: NLog.Web.AspNetCore
+2020-05-09 13:51:28.5424 Info Adding target FileTarget(Name=alldata)
+2020-05-09 13:51:28.5784 Info Adding target FileTarget(Name=otherFile-web)
+2020-05-09 13:51:28.6897 Info Found 45 configuration items
+2020-05-09 13:51:30.7411 Info Configuring from an XML element in H:\FirstProject\ItemService/nlog.config...
+2020-05-09 13:51:30.7411 Info Message Template Auto Format enabled
+2020-05-09 13:51:30.7633 Info Loading assembly: NLog.Web.AspNetCore
+2020-05-09 13:51:30.7727 Info Adding target FileTarget(Name=alldata)
+2020-05-09 13:51:30.7727 Info Adding target FileTarget(Name=otherFile-web)
+2020-05-09 13:51:30.7878 Info Closing old configuration.
+2020-05-09 13:51:30.8686 Info Found 45 configuration items
+2020-05-09 15:03:53.1659 Info Message Template Auto Format enabled
+2020-05-09 15:03:53.1877 Info Loading assembly: NLog.Web.AspNetCore
+2020-05-09 15:03:53.3050 Info Adding target FileTarget(Name=alldata)
+2020-05-09 15:03:53.3425 Info Adding target FileTarget(Name=otherFile-web)
+2020-05-09 15:03:53.3823 Info Found 45 configuration items
+2020-05-09 15:03:53.9910 Info Configuring from an XML element in H:\FirstProject\ItemService/nlog.config...
+2020-05-09 15:03:53.9910 Info Message Template Auto Format enabled
+2020-05-09 15:03:53.9910 Info Loading assembly: NLog.Web.AspNetCore
+2020-05-09 15:03:54.0190 Info Adding target FileTarget(Name=alldata)
+2020-05-09 15:03:54.0251 Info Adding target FileTarget(Name=otherFile-web)
+2020-05-09 15:03:54.0251 Info Closing old configuration.
+2020-05-09 15:03:54.0619 Info Found 45 configuration items

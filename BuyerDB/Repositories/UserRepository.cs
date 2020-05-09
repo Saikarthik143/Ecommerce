@@ -18,7 +18,7 @@ namespace BuyerDB.Repositories
         public async Task<Login> BuyerLogin(Login login)
         {
             Buyer buyer = await _buyerContext.Buyer.SingleOrDefaultAsync(e => e.Buyername == login.userName && e.Password == login.userPassword);
-            if (buyer.Buyername == login.userName && buyer.Password == login.userPassword)
+            if (buyer!=null)
             {
                 return login;
             }
@@ -29,9 +29,19 @@ namespace BuyerDB.Repositories
             }
         }
 
-        public async Task<bool> BuyerRegister(Buyer buyer)
+        public async Task<bool> BuyerRegister(BuyerRegister buyer)
         {
-            _buyerContext.Buyer.Add(buyer);
+            Buyer buyer1 = new Buyer();
+            if (buyer != null)
+            {
+                buyer1.Buyerid = buyer.buyerId;
+                buyer1.Buyername = buyer.userName;
+                buyer1.Password = buyer.password;
+                buyer1.Mobileno = buyer.mobileNo;
+                buyer1.Email = buyer.emailId;
+                buyer1.Datetime = buyer.dateTime;
+            }
+            _buyerContext.Buyer.Add(buyer1);
             var user = await _buyerContext.SaveChangesAsync();
             if (user > 0)
             {

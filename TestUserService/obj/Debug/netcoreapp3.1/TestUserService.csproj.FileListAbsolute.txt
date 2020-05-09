@@ -206,3 +206,6 @@ H:\FirstProject\TestUserService\bin\Debug\netcoreapp3.1\Castle.Core.dll
 H:\FirstProject\TestUserService\bin\Debug\netcoreapp3.1\Moq.dll
 H:\FirstProject\TestUserService\obj\Debug\netcoreapp3.1\TestUserService.dll
 H:\FirstProject\TestUserService\obj\Debug\netcoreapp3.1\TestUserService.pdb
+H:\FirstProject\TestUserService\bin\Debug\netcoreapp3.1\System.Net.Http.Formatting.dll
+H:\FirstProject\TestUserService\bin\Debug\netcoreapp3.1\System.Web.Http.dll
+H:\FirstProject\TestUserService\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll

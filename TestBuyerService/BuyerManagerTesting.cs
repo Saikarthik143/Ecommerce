@@ -1,4 +1,5 @@
 ﻿using BuyerDB.Entity;
+using BuyerDB.Models;
 using BuyerDB.Repositories;
 using BuyerService.Manager;
 using Moq;
@@ -37,9 +38,11 @@ namespace TestBuyerService
         {
             try
             {
-                var result = await _buyerManager.GetBuyerProfile(buyerId);
-                var mock = new Mock<IBuyerManager>();
-                mock.Setup(x => x.GetBuyerProfile(buyerId));
+                BuyerData buyer = new BuyerData();
+                var mock = new Mock<IBuyerRepository>();
+                mock.Setup(x => x.GetBuyerProfile(buyerId)).ReturnsAsync(buyer);
+                BuyerManager buyerManager = new BuyerManager(mock.Object);
+                var result = await buyerManager.GetBuyerProfile(buyerId);
                 Assert.NotNull(result);
             }
             catch (Exception e)
@@ -58,10 +61,11 @@ namespace TestBuyerService
         {
             try
             {
-                var result = await _buyerManager.GetBuyerProfile(buyerId);
-                var mock = new Mock<IBuyerManager>();
+                var mock = new Mock<IBuyerRepository>();
                 mock.Setup(x => x.GetBuyerProfile(buyerId));
-                Assert.IsNull(result);
+                BuyerManager buyerManager = new BuyerManager(mock.Object);
+                var result = await buyerManager.GetBuyerProfile(buyerId);
+                Assert.IsNull(result, "Invalid User");
             }
             catch (Exception e)
             {
@@ -77,13 +81,13 @@ namespace TestBuyerService
         {
             try
             {
-                Buyer buyer = await _buyerManager.GetBuyerProfile("B001");
-                buyer.Mobileno = "9087654321";
-                await _buyerManager.EditBuyerProfile(buyer);
-                Buyer buyer1 = await _buyerManager.GetBuyerProfile("B001");
-                var mock = new Mock<IBuyerManager>();
-                mock.Setup(x => x.GetBuyerProfile("B001"));
-                Assert.AreSame(buyer, buyer1);
+                BuyerData buyer = new BuyerData() { buyerId = "B001", userName = "Karthik", password = "karthik123", emailId = "Karthik@gmail.com", mobileNo = "9873452567", dateTime = System.DateTime.Now };
+                var mock = new Mock<IBuyerRepository>();
+                mock.Setup(x => x.EditBuyerProfile(buyer)).ReturnsAsync(true);
+                BuyerManager buyerManager = new BuyerManager(mock.Object);
+                var result = await buyerManager.EditBuyerProfile(buyer);
+                Assert.IsNotNull(result);
+                Assert.AreEqual(true, result);
             }
             catch (Exception e)
             {
@@ -99,13 +103,13 @@ namespace TestBuyerService
         {
             try
             {
-                Buyer buyer = await _buyerManager.GetBuyerProfile("B0123");
-                buyer.Email = "abc@gmail.com";
-                await _buyerManager.EditBuyerProfile(buyer);
-                Buyer buyer1 = await _buyerManager.GetBuyerProfile("6375");
-                var mock = new Mock<IBuyerManager>();
-                mock.Setup(x => x.GetBuyerProfile("B0123"));
-                Assert.AreNotSame(buyer, buyer1);
+                BuyerData buyer = new BuyerData() { buyerId ="B674", userName = "anvi", password = "abcdefg@", emailId = "anvi@gmail.com", mobileNo = "9873452567", dateTime = System.DateTime.Now };
+                var mock = new Mock<IBuyerRepository>();
+                mock.Setup(x => x.EditBuyerProfile(buyer));
+                BuyerManager buyerManager = new BuyerManager(mock.Object);
+                var result = await buyerManager.EditBuyerProfile(buyer);
+                Assert.IsNull(result,"Invalid");
+                Assert.AreEqual(false, result);
             }
             catch (Exception e)
             {

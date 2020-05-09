@@ -11,29 +11,40 @@ namespace UserService.Manager
     public class UserManager : IUserManager
     {
         private readonly IUserRepository _userRepository;
+        readonly List<Buyer> buyers = new List<Buyer>();
         public UserManager(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
         public async Task<Login> BuyerLogin(Login login)
         {
-            Buyer buyer = new Buyer();
             Login login1 = await _userRepository.BuyerLogin(login);
-            if (buyer.Buyername == login.userName && buyer.Password == login.userPassword)
+            if (login1 != null)
             {
                 return login1;
             }
             else
             {
                 Console.WriteLine("Invalid");
-                return login1;
+                return null;
             }
         }
 
-        public async Task<bool> BuyerRegister(Buyer buyer)
+        public async Task<bool> BuyerRegister(BuyerRegister buyer)
         {
-            bool user = await _userRepository.BuyerRegister(buyer);
-            return user;
+            Buyer buyer1 = new Buyer();
+            var result = buyers.Where(i => i.Email.ToString() == buyer1.Email.ToString()).Select(i => i).ToList();
+            //var result = (from i in buyers select i).ToList();
+            if (result.Count > 1)
+            {
+                return false;
+            }
+            else
+            {
+
+                bool user = await _userRepository.BuyerRegister(buyer);
+                return user;
+            }
         }
     }
 }
