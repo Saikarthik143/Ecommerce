@@ -33,7 +33,7 @@ namespace ItemService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<BuyerContext>(options => options.UseSqlServer(Configuration.GetConnectionString("connectionstring")));
+            services.AddDbContext<BuyerDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("connectionstring")));
             services.AddTransient<IItemManager, ItemManager>();
             services.AddTransient<IItemRepository, ItemRepository>();
             services.AddCors(c =>

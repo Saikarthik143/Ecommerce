@@ -9,6 +9,12 @@ using BuyerDB.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using UserService.Manager;
 using Microsoft.Extensions.Logging;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.Extensions.Configuration;
+using System.Text;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace UserService.Controllers
 {
@@ -19,15 +25,14 @@ namespace UserService.Controllers
         
         private readonly IUserManager _userManager;
         private readonly ILogger<UserController> _logger;
-        public UserController(IUserManager userManager, ILogger<UserController> logger)
+        private readonly IConfiguration configuration;
+        public UserController(IUserManager userManager, ILogger<UserController> logger,IConfiguration configuration)
         {
             _userManager = userManager;
             _logger = logger;
+            this.configuration = configuration;
         }
-       /* public UserController(IUserManager userManager)
-        {
-            _userManager = userManager;
-        }*/
+      
         /// <summary>
         /// Register buyer
         /// </summary>
@@ -57,19 +62,47 @@ namespace UserService.Controllers
         /// <param name="uname"></param>
         /// <param name="pwd"></param>
         /// <returns></returns>
-        [HttpPost]
-        [Route("Login")]
-        public async Task<IActionResult> BuyerLogin(Login login)
+        [HttpGet]
+        [Route("Login/{userName}/{password}")]
+        public async Task<IActionResult> BuyerLogin(string userName, string password)
         {
+            Token token = null;
             _logger.LogInformation("User Login");
 
-            Login login1 = await _userManager.BuyerLogin(login);
-            if (login1 == null)
+            Login login1 = await _userManager.BuyerLogin(userName, password);
+            if (login1 != null)
             {
-                return Ok("Invalid User");
+                token = new Token() { buyerid = login1.buyerId, username = login1.userName, token = GenerateJwtToken(userName), message = "Success" };
             }
-            _logger.LogInformation($"Welcome{login.userName}");
-            return Ok(login);
+            else
+            {
+                token = new Token() { token = null, message = "UnSuccess" };
+            }
+            _logger.LogInformation($"Welcome{userName}");
+            return Ok(token);
+        }
+        private string GenerateJwtToken(string username)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Sub, username),
+                new Claim(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, username),
+                new Claim(ClaimTypes.Role,username)
+            };
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtKey"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            // recommended is 5 min
+            var expires = DateTime.Now.AddDays(Convert.ToDouble(configuration["JwtExpireDays"]));
+            var token = new JwtSecurityToken(
+                configuration["JwtIssuer"],
+                configuration["JwtIssuer"],
+                claims,
+                expires: expires,
+                signingCredentials: credentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

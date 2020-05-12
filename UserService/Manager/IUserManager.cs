@@ -10,6 +10,6 @@ namespace UserService.Manager
   public  interface IUserManager
     {
         Task<bool> BuyerRegister(BuyerRegister buyer);
-        Task<Login> BuyerLogin(Login login);
+        Task<Login> BuyerLogin(string userName, string password);
     }
 }

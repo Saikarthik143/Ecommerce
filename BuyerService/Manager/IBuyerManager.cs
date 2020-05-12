@@ -10,6 +10,6 @@ namespace BuyerService.Manager
    public interface IBuyerManager
     {
         Task<bool> EditBuyerProfile(BuyerData buyer);
-        Task<BuyerData> GetBuyerProfile(string buyerId);
+        Task<BuyerData> GetBuyerProfile(int buyerId);
     }
 }

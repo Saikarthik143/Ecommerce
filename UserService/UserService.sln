@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService", "UserService.csproj", "{DFAB3A70-0E8A-4079-9340-D2D96CFCA9FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService", "UserService.csproj", "{DFAB3A70-0E8A-4079-9340-D2D96CFCA9FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuyerDB", "..\BuyerDB\BuyerDB.csproj", "{44BCE252-BCBB-4B85-A233-57C36D574F29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuyerDB", "..\BuyerDB\BuyerDB.csproj", "{44BCE252-BCBB-4B85-A233-57C36D574F29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestUserService", "..\TestUserService\TestUserService.csproj", "{4E6C0B12-AE0C-4477-8D10-03A69823E8CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestUserService", "..\TestUserService\TestUserService.csproj", "{4E6C0B12-AE0C-4477-8D10-03A69823E8CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

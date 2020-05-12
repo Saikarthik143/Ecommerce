@@ -8,6 +8,6 @@ namespace BuyerDB.Models
     {
         public string userName { get; set; }
         public string userPassword { get; set; }
-        public string buyerId { get; set; }
+        public int buyerId { get; set; }
     }
 }

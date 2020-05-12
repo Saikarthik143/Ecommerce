@@ -9,8 +9,8 @@ namespace BuyerDB.Repositories
 {
     public class BuyerRepository : IBuyerRepository
     {
-        private readonly BuyerContext _buyerContext;
-        public BuyerRepository(BuyerContext buyerContext)
+        private readonly BuyerDBContext _buyerContext;
+        public BuyerRepository(BuyerDBContext buyerContext)
         {
             _buyerContext = buyerContext;
         }
@@ -19,7 +19,7 @@ namespace BuyerDB.Repositories
             Buyer buyer1 = _buyerContext.Buyer.Find(buyer.buyerId);
             if (buyer1 != null)
             {
-                buyer1.Buyername = buyer.userName;
+                buyer1.Username = buyer.userName;
                 buyer1.Password = buyer.password;
                 buyer1.Mobileno = buyer.mobileNo;
                 buyer1.Email = buyer.emailId;
@@ -38,7 +38,7 @@ namespace BuyerDB.Repositories
                 return false;
         }
 
-        public async Task<BuyerData> GetBuyerProfile(string buyerId)
+        public async Task<BuyerData> GetBuyerProfile(int buyerId)
         {
             Buyer buyer = await _buyerContext.Buyer.FindAsync(buyerId);
             if (buyer == null)
@@ -47,7 +47,7 @@ namespace BuyerDB.Repositories
             {
                 BuyerData buyerData = new BuyerData();
                 buyerData.buyerId = buyer.Buyerid;
-                buyerData.userName = buyer.Buyername;
+                buyerData.userName = buyer.Username;
                 buyerData.password = buyer.Password;
                 buyerData.emailId = buyer.Email;
                 buyerData.mobileNo = buyer.Mobileno;

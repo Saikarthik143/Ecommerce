@@ -19,7 +19,7 @@ namespace TestBuyerService
         [SetUp]
         public void SetUp()
         {
-            buyerRepository = new BuyerRepository(new BuyerContext());
+            buyerRepository = new BuyerRepository(new BuyerDBContext());
         }
 
         [TearDown]
@@ -34,7 +34,7 @@ namespace TestBuyerService
         [TestCase("B001")]
         [TestCase("B002")]
         [Description("testing buyer Profile")]
-        public async Task BuyerProfile_Successfull(string buyerId)
+        public async Task BuyerProfile_Successfull(int buyerId)
         {
             try
             {
@@ -55,15 +55,15 @@ namespace TestBuyerService
         [TestCase("b54")]
         [TestCase("b6")]
         [Description("testing buyer Profile failure")]
-        public async Task BuyerProfile_UnSuccessfull(string buyerId)
+        public async Task BuyerProfile_UnSuccessfull(int buyerId)
         {
             try
             {
                 var result = await buyerRepository.GetBuyerProfile(buyerId);
                /* var mock = new Mock<IBuyerRepository>();
                 mock.Setup(x => x.GetBuyerProfile(buyerId));*/
-                var result1 = await buyerRepository.GetBuyerProfile(buyerId);
-                Assert.IsNull(result1,"Invalid");
+               // var result1 = await buyerRepository.GetBuyerProfile(buyerId);
+                Assert.IsNull(result,"Invalid");
             }
             catch (Exception e)
             {
@@ -79,7 +79,7 @@ namespace TestBuyerService
         {
             try
             {
-                BuyerData buyer = new BuyerData() { buyerId = "B001", userName = "Karthik", password = "karthik123", emailId = "Karthik@gmail.com", mobileNo = "9873452567", dateTime = System.DateTime.Now };
+                BuyerData buyer = new BuyerData() { buyerId = 001, userName = "Karthik", password = "karthik123", emailId = "Karthik@gmail.com", mobileNo = "9873452567", dateTime = System.DateTime.Now };
                /* var mock = new Mock<IBuyerRepository>();
                 mock.Setup(x => x.EditBuyerProfile(buyer)).ReturnsAsync(true);*/
                 var result = await buyerRepository.EditBuyerProfile(buyer);
@@ -101,7 +101,7 @@ namespace TestBuyerService
             try
             {
 
-                BuyerData buyer = new BuyerData() { buyerId = "B01", userName = "Karthik", password = "karthik123", emailId = "Karthik@gmail.com", mobileNo = "9873452567", dateTime = System.DateTime.Now };
+                BuyerData buyer = new BuyerData() { buyerId = 01, userName = "Karthik", password = "karthik123", emailId = "Karthik@gmail.com", mobileNo = "9873452567", dateTime = System.DateTime.Now };
              /*   var mock = new Mock<IBuyerRepository>();
                 mock.Setup(x => x.EditBuyerProfile(buyer));*/
                 var result = await buyerRepository.EditBuyerProfile(buyer);

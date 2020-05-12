@@ -10,17 +10,22 @@ namespace BuyerDB.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly BuyerContext _buyerContext;
-        public UserRepository(BuyerContext buyerContext)
+        private readonly BuyerDBContext _buyerContext;
+        public UserRepository(BuyerDBContext buyerContext)
         {
             _buyerContext = buyerContext;
         }
-        public async Task<Login> BuyerLogin(Login login)
+        public async Task<Login> BuyerLogin(string userName, string password)
         {
-            Buyer buyer = await _buyerContext.Buyer.SingleOrDefaultAsync(e => e.Buyername == login.userName && e.Password == login.userPassword);
-            if (buyer!=null)
+            Buyer buyer = await _buyerContext.Buyer.SingleOrDefaultAsync(e => e.Username == userName && e.Password == password);
+            if (buyer != null)
             {
-                return login;
+                return new Login
+                {
+                    userName = buyer.Username,
+                    userPassword = buyer.Password,
+                    buyerId = buyer.Buyerid,
+                };
             }
             else
             {
@@ -35,7 +40,7 @@ namespace BuyerDB.Repositories
             if (buyer != null)
             {
                 buyer1.Buyerid = buyer.buyerId;
-                buyer1.Buyername = buyer.userName;
+                buyer1.Username = buyer.userName;
                 buyer1.Password = buyer.password;
                 buyer1.Mobileno = buyer.mobileNo;
                 buyer1.Email = buyer.emailId;

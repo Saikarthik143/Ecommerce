@@ -7,6 +7,7 @@ using BuyerDB.Models;
 using BuyerDB.Repositories;
 using System.Threading.Tasks;
 using Moq;
+using Microsoft.EntityFrameworkCore;
 
 namespace TestUserService
 {
@@ -14,10 +15,13 @@ namespace TestUserService
     class UserRepositoryTesting
     {
         IUserRepository userRepository;
+        DbContextOptionsBuilder<BuyerDBContext> _builder;
         [SetUp]
         public void SetUp()
         {
-            userRepository = new UserRepository(new BuyerContext());
+            _builder = new DbContextOptionsBuilder<BuyerDBContext>().EnableSensitiveDataLogging().UseInMemoryDatabase(Guid.NewGuid().ToString());
+            BuyerDBContext db = new BuyerDBContext(_builder.Options);
+            userRepository = new UserRepository(db);
         }
         [TearDown]
         public void TearDown()
@@ -28,10 +32,10 @@ namespace TestUserService
         /// Testing register buyer
         /// </summary>
         [Test]
-        [TestCase("B12", "gopi", "sarath123#", "sarath@gmail.com", "9876543210")]
-        [TestCase("B14", "nath", "trath123#", "tarath@gmail.com", "9879543210")]
+        [TestCase(12, "gopi", "sarath123#", "sarath@gmail.com", "9876543210")]
+        [TestCase(14, "nath", "trath123#", "tarath@gmail.com", "9879543210")]
         [Description("Add Buyer Testing")]
-        public async Task RegisterBuyer_Successfull(string buyerId, string userName, string password, string email, string mobileNo)
+        public async Task RegisterBuyer_Successfull(int buyerId, string userName, string password, string email, string mobileNo)
         {
             try
             {
@@ -48,14 +52,14 @@ namespace TestUserService
             }
         }
         [Test]
-        [TestCase("Karthik", "karthik123")]
+        [TestCase("Karthik", "karthik@123")]
         [Description("testing buyer login")]
         public async Task BuyerLogin_Successfull(string userName, string password)
         {
             try
             {
-                var login = new Login { userName = userName, userPassword = password };
-                var result = await userRepository.BuyerLogin(login);
+                
+                var result = await userRepository.BuyerLogin(userName,password);
                 Assert.NotNull(result);
             }
             catch (Exception e)
@@ -70,8 +74,7 @@ namespace TestUserService
         {
             try
             {
-                var login = new Login { userName = userName, userPassword = password };
-                var result = await userRepository.BuyerLogin(login);
+                var result = await userRepository.BuyerLogin(userName,password);
                 Assert.IsNull(result, "invalid credentials");
             }
             catch (Exception e)

@@ -29,8 +29,7 @@ namespace BuyerService.Controllers
         }
         [HttpGet]
         [Route("Profile/{buyerId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetBuyerProfile(string buyerId)
+        public async Task<IActionResult> GetBuyerProfile(int buyerId)
         {
             BuyerData buyer = await _buyerManager.GetBuyerProfile(buyerId);
             if (buyer == null)

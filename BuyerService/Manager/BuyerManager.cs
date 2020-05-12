@@ -28,7 +28,7 @@ namespace BuyerService.Manager
             }
         }
 
-        public async Task<BuyerData> GetBuyerProfile(string buyerId)
+        public async Task<BuyerData> GetBuyerProfile(int buyerId)
         {
             BuyerData buyer = await _buyerRepository.GetBuyerProfile(buyerId);
             if (buyer == null)

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace BuyerDB.Repositories
 {
-  public  interface IBuyerRepository
+    public interface IBuyerRepository
     {
         Task<bool> EditBuyerProfile(BuyerData buyer);
-        Task<BuyerData> GetBuyerProfile(string buyerId);
+        Task<BuyerData> GetBuyerProfile(int buyerId);
     }
 }

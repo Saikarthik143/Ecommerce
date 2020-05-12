@@ -7,7 +7,7 @@ namespace BuyerDB.Models
 {
   public  class BuyerRegister
     {
-        public string buyerId { get; set; }
+        public int buyerId { get; set; }
         [Required(ErrorMessage = "pls Enter your Name")]
         [StringLength(maximumLength: 20,ErrorMessage = "Name should not be greater than 20")]
         public string userName { get; set; }

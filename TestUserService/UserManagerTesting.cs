@@ -18,7 +18,7 @@ namespace TestUserService
         [SetUp]
         public void SetUp()
         {
-            userManager = new UserManager(new UserRepository(new BuyerContext()));
+            userManager = new UserManager(new UserRepository(new BuyerDBContext()));
         }
 
         [TearDown]
@@ -30,10 +30,10 @@ namespace TestUserService
         /// Testing register buyer
         /// </summary>
         [Test]
-        [TestCase("B7388", "jaya", "abcdefg2", "9365778295", "jaya@gmail.com")]
-        [TestCase("B6499", "sai", "abcdefg2", "9462753495", "sai@gmail.com")]
+        [TestCase(7388, "jaya", "abcdefg2", "9365778295", "jaya@gmail.com")]
+        [TestCase(6499, "sai", "abcdefg2", "9462753495", "sai@gmail.com")]
         [Description("testing buyer Register")]
-        public async Task RegisterBuyer_Successfull(string buyerId, string userName, string password, string mobileNo, string email)
+        public async Task RegisterBuyer_Successfull(int buyerId, string userName, string password, string mobileNo, string email)
         {
             try
             {
@@ -61,9 +61,9 @@ namespace TestUserService
         /// <param name="email"></param>
         /// <returns></returns>
         [Test]
-        [TestCase("7366", "apple", "abcdefg2", "9365778295", "apple@gmail.com")]
+        [TestCase(7366, "apple", "abcdefg2", "9365778295", "apple@gmail.com")]
         [Description("testing buyer Register")]
-        public async Task RegisterBuyer_UnSuccessfull(string buyerId, string userName, string password, string mobileNo, string email)
+        public async Task RegisterBuyer_UnSuccessfull(int buyerId, string userName, string password, string mobileNo, string email)
         {
             try
             {
@@ -88,14 +88,14 @@ namespace TestUserService
         /// <param name="password"></param>
         /// <returns></returns>
         [Test]
-        [TestCase("Karthik", "karthik123")]
+        [TestCase("Karthik", "karthik@123")]
         [Description("testing buyer login")]
         public async Task BuyerLogin_Successfull(string userName, string password)
         {
             try
             {
-                var login = new Login { userName = userName, userPassword = password };
-                var result = await userManager.BuyerLogin(login);
+               
+                var result = await userManager.BuyerLogin(userName,password);
                 Assert.NotNull(result);
             }
             catch (Exception e)
@@ -116,8 +116,8 @@ namespace TestUserService
         {
             try
             {
-                Login login = new Login { userName = userName, userPassword = password };
-                var result = await userManager.BuyerLogin(login);
+                
+                var result = await userManager.BuyerLogin(userName,password);
                 Assert.IsNull(result,"invalid credentials");
             }
             catch (Exception e)

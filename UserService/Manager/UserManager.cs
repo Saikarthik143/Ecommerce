@@ -16,9 +16,9 @@ namespace UserService.Manager
         {
             _userRepository = userRepository;
         }
-        public async Task<Login> BuyerLogin(Login login)
+        public async Task<Login> BuyerLogin(string userName, string password)
         {
-            Login login1 = await _userRepository.BuyerLogin(login);
+            Login login1 = await _userRepository.BuyerLogin(userName,password);
             if (login1 != null)
             {
                 return login1;

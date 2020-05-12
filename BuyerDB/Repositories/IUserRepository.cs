@@ -10,6 +10,6 @@ namespace BuyerDB.Repositories
     public interface IUserRepository
     {
         Task<bool> BuyerRegister(BuyerRegister buyer);
-        Task<Login> BuyerLogin(Login login);
+        Task<Login> BuyerLogin(string userName, string password);
     }
 }

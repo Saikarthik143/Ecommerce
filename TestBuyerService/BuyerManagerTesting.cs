@@ -19,7 +19,7 @@ namespace TestBuyerService
         [SetUp]
         public void SetUp()
         {
-            _buyerManager = new BuyerManager(new BuyerRepository(new BuyerContext()));
+            _buyerManager = new BuyerManager(new BuyerRepository(new BuyerDBContext()));
         }
 
         [TearDown]
@@ -34,7 +34,7 @@ namespace TestBuyerService
         [TestCase("B002")]
         [TestCase("B001")]
         [Description("testing buyer Profile")]
-        public async Task BuyerProfile_Successfull(string buyerId)
+        public async Task BuyerProfile_Successfull(int buyerId)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace TestBuyerService
         [TestCase("458")]
         [TestCase("322")]
         [Description("testing buyer Profile failure")]
-        public async Task BuyerProfile_UnSuccessfull(string buyerId)
+        public async Task BuyerProfile_UnSuccessfull(int buyerId)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace TestBuyerService
         {
             try
             {
-                BuyerData buyer = new BuyerData() { buyerId = "B001", userName = "Karthik", password = "karthik123", emailId = "Karthik@gmail.com", mobileNo = "9873452567", dateTime = System.DateTime.Now };
+                BuyerData buyer = new BuyerData() { buyerId = 001, userName = "Karthik", password = "karthik123", emailId = "Karthik@gmail.com", mobileNo = "9873452567", dateTime = System.DateTime.Now };
                 var mock = new Mock<IBuyerRepository>();
                 mock.Setup(x => x.EditBuyerProfile(buyer)).ReturnsAsync(true);
                 BuyerManager buyerManager = new BuyerManager(mock.Object);
@@ -103,7 +103,7 @@ namespace TestBuyerService
         {
             try
             {
-                BuyerData buyer = new BuyerData() { buyerId ="B674", userName = "anvi", password = "abcdefg@", emailId = "anvi@gmail.com", mobileNo = "9873452567", dateTime = System.DateTime.Now };
+                BuyerData buyer = new BuyerData() { buyerId =674, userName = "anvi", password = "abcdefg@", emailId = "anvi@gmail.com", mobileNo = "9873452567", dateTime = System.DateTime.Now };
                 var mock = new Mock<IBuyerRepository>();
                 mock.Setup(x => x.EditBuyerProfile(buyer));
                 BuyerManager buyerManager = new BuyerManager(mock.Object);

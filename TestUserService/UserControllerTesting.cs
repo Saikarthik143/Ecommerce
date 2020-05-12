@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using UserService.Manager;
 using Microsoft.Extensions.Logging;
 using System.Web.Http.Results;
+using Microsoft.Extensions.Configuration;
 
 namespace TestUserService
 {
@@ -21,27 +22,29 @@ namespace TestUserService
        private UserController userController;
         private Mock<IUserManager> mockUserManager;
         private Mock<ILogger<UserController>> logger;
+        private IConfiguration configuration;
         [SetUp]
         public void SetUp()
         {
             mockUserManager = new Mock<IUserManager>();
             logger = new Mock<ILogger<UserController>>();
-            userController = new UserController( mockUserManager.Object, logger.Object);
+            userController = new UserController( mockUserManager.Object, logger.Object,configuration);
         }
 
         [Test]
-        [TestCase("b985", "lohit", "abcdefg@", "krish@gmail.com", "9358778295")]
-        [TestCase("b132", "devar", "abcdefg@", "sri@gmail.com", "9462623495")]
+        [TestCase(985, "lohit", "abcdefg@", "krish@gmail.com", "9358778295")]
+        [TestCase(132, "devar", "abcdefg@", "sri@gmail.com", "9462623495")]
         [Description("testing buyer Register")]
-        public async Task RegisterBuyerController_Successfull(string buyerId, string userName, string password, string email, string mobileNo)
+        public async Task RegisterBuyerController_Successfull(int buyerId, string userName, string password, string email, string mobileNo)
         {
             try
             {
                 DateTime dateTime = System.DateTime.Now;
+                mockUserManager.Setup(x => x.BuyerRegister(It.IsAny<BuyerRegister>())).ReturnsAsync(new bool());
                 BuyerRegister buyerRegister = new BuyerRegister() { buyerId = buyerId, userName = userName, password = password, mobileNo = mobileNo, emailId = email, dateTime = dateTime };
-                mockUserManager.Setup(d => d.BuyerRegister(buyerRegister)).ReturnsAsync(true);
-                IActionResult result = await userController.Buyer(buyerRegister);
-                Assert.IsNotNull(result);
+                var result = await userController.Buyer(buyerRegister) as OkObjectResult;
+                Assert.That(result, Is.Not.Null);
+                Assert.That(result.StatusCode, Is.EqualTo(200));
             }
             catch (Exception e)
             {
@@ -55,17 +58,16 @@ namespace TestUserService
         /// <param name="password"></param>
         /// <returns></returns>
         [Test]
-        [TestCase("Karthik", "karthik123")]
+        [TestCase("Karthik", "karthik@123")]
         [Description("Buyer Login")]
         public async Task BuyerLogin_Successfull(string userName, string password)
         {
             try
             {
-                Login login = new Login() { userName = userName, userPassword = password };
-                mockUserManager.Setup(d => d.BuyerLogin(login)).ReturnsAsync(login);
-                IActionResult result = await userController.BuyerLogin(login);
-                var contentResult = result as OkNegotiatedContentResult<Login>;
-                Assert.IsNotNull(contentResult);
+                mockUserManager.Setup(x => x.BuyerLogin(userName, password));
+                var result = await userController.BuyerLogin(userName, password) as OkObjectResult;
+                Assert.That(result, Is.Not.Null);
+                Assert.That(result.StatusCode, Is.EqualTo(200));
             }
             catch (Exception e)
             {
@@ -85,12 +87,10 @@ namespace TestUserService
         {
             try
             {
-                Login login = new Login() { userName = userName, userPassword = password };
-                mockUserManager.Setup(d => d.BuyerLogin(login)).ReturnsAsync(login);
-                IActionResult result = await userController.BuyerLogin(login);
-                var contentResult = result as OkNegotiatedContentResult<Login>;
+                mockUserManager.Setup(d => d.BuyerLogin(userName, password));
+                IActionResult result = await userController.BuyerLogin(userName, password);
                 Assert.IsNull(result);
-                Assert.IsNull(contentResult, "Invalid User");
+                Assert.IsNull(result, "Invalid User");
             }
             catch (Exception e)
             {
